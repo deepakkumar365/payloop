@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayLoop - Usage-Based Billing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex flex-col h-screen"></div>
+    
+    <template id="page-content">
+        <div class="container mx-auto p-4">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Usage-Based Billing</h2>
+                    <button onclick="showAddUsageModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        + Create Billing
+                    </button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="py-2 px-4 text-left">Customer</th>
+                                <th class="py-2 px-4 text-left">Service</th>
+                                <th class="py-2 px-4 text-left">Rate</th>
+                                <th class="py-2 px-4 text-left">Start Date</th>
+                                <th class="py-2 px-4 text-left">Status</th>
+                                <th class="py-2 px-4 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usage-billings-table">
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-gray-500">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-gray-800">Usage Records</h2>
+                        <button onclick="showAddUsageRecordModal()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-3 rounded text-sm">
+                            + Add Record
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white text-sm">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="py-2 px-3 text-left">Service</th>
+                                    <th class="py-2 px-3 text-left">Date</th>
+                                    <th class="py-2 px-3 text-left">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usage-records-table">
+                                <tr>
+                                    <td colspan="3" class="text-center py-4 text-gray-500">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Usage Bills</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white text-sm">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="py-2 px-3 text-left">Bill #</th>
+                                    <th class="py-2 px-3 text-left">Amount</th>
+                                    <th class="py-2 px-3 text-left">Status</th>
+                                    <th class="py-2 px-3 text-left">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usage-bills-table">
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-gray-500">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="usage-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+                <h3 class="text-lg font-bold mb-4">Create Usage Billing</h3>
+                <form id="usage-form" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Customer</label>
+                        <select id="usage-customer" class="shadow border rounded w-full py-2 px-3" required>
+                            <option value="">Select Customer</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Service Name</label>
+                        <input type="text" id="usage-service" class="shadow border rounded w-full py-2 px-3" placeholder="e.g., Milk Delivery, Newspaper" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Rate Per Unit</label>
+                        <input type="number" step="0.01" id="usage-rate" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Rate Type</label>
+                        <select id="usage-rate-type" class="shadow border rounded w-full py-2 px-3" required>
+                            <option value="PER_DAY" selected>Per Day</option>
+                            <option value="PER_LITER">Per Liter</option>
+                            <option value="PER_UNIT">Per Unit</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Start Date</label>
+                        <input type="date" id="usage-start-date" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" onclick="hideUsageModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Create
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="usage-record-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+                <h3 class="text-lg font-bold mb-4">Add Usage Record</h3>
+                <form id="usage-record-form" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Usage Billing</label>
+                        <select id="usage-record-billing" class="shadow border rounded w-full py-2 px-3" required>
+                            <option value="">Select Billing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Date</label>
+                        <input type="date" id="usage-record-date" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Quantity</label>
+                        <input type="number" step="0.01" id="usage-record-quantity" class="shadow border rounded w-full py-2 px-3" value="1" required>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" onclick="hideUsageRecordModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Add Record
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="usage-payment-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+                <h3 class="text-lg font-bold mb-4">Record Usage Bill Payment</h3>
+                <form id="usage-payment-form" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Amount Paid</label>
+                        <input type="number" step="0.01" id="usage-payment-amount" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Payment Date</label>
+                        <input type="date" id="usage-payment-date" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Payment Mode</label>
+                        <select id="usage-payment-mode" class="shadow border rounded w-full py-2 px-3" required>
+                            <option value="CASH" selected>Cash</option>
+                            <option value="UPI">UPI</option>
+                            <option value="BANK_TRANSFER">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" onclick="hideUsagePaymentModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Record Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+    
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/components.js"></script>
+    <script src="static/js/layout.js"></script>
+    <script src="static/js/usage.js"></script>
+</body>
+</html>

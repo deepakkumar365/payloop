@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayLoop - Customers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex flex-col h-screen"></div>
+    
+    <template id="page-content">
+        <div class="container mx-auto p-4">
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Customers</h2>
+                    <button onclick="showAddCustomerModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        + Add Customer
+                    </button>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="py-2 px-4 text-left">Name</th>
+                                <th class="py-2 px-4 text-left">Phone</th>
+                                <th class="py-2 px-4 text-left">Address</th>
+                                <th class="py-2 px-4 text-left">Cycle</th>
+                                <th class="py-2 px-4 text-left">Amount</th>
+                                <th class="py-2 px-4 text-left">Type</th>
+                                <th class="py-2 px-4 text-left">Status</th>
+                                <th class="py-2 px-4 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-table">
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-gray-500">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="customer-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+                <h3 class="text-lg font-bold mb-4">Add Customer</h3>
+                <form id="customer-form" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                        <input type="text" id="customer-name" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Phone</label>
+                        <input type="tel" id="customer-phone" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Address</label>
+                        <input type="text" id="customer-address" class="shadow border rounded w-full py-2 px-3">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Payment Type</label>
+                        <select id="customer-payment-type" class="shadow border rounded w-full py-2 px-3">
+                            <option value="">None</option>
+                            <option value="LOAN">Loan</option>
+                            <option value="SUBSCRIPTION">Subscription</option>
+                            <option value="USAGE_BASED">Usage-Based</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Collection Cycle</label>
+                        <select id="customer-cycle" class="shadow border rounded w-full py-2 px-3" required>
+                            <option value="DAILY">Daily</option>
+                            <option value="WEEKLY">Weekly</option>
+                            <option value="MONTHLY">Monthly</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Collection Amount</label>
+                        <input type="number" step="0.01" id="customer-amount" class="shadow border rounded w-full py-2 px-3" required>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" onclick="hideCustomerModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+    
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/components.js"></script>
+    <script src="static/js/layout.js"></script>
+    <script src="static/js/customers.js"></script>
+</body>
+</html>
